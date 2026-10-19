@@ -41,6 +41,9 @@ import './components/themeMediaPlayer';
 import './scripts/mouseManager';
 import './scripts/screensavermanager';
 
+// Personal customizations (trickplay badges, dislikes, file-size filter/sort)
+import './custom';
+
 // Import site styles
 import './styles/site.scss';
 import './styles/livetv.scss';
