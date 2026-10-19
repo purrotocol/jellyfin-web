@@ -13,7 +13,25 @@ const RETRY_DELAY_MS = 2000;
 // The dislike index only covers video item kinds.
 const SUPPORTED_TABS = [ LibraryTab.Movies, LibraryTab.Episodes, LibraryTab.Videos, LibraryTab.MusicVideos ];
 
+const MB = 1024 * 1024;
+const GB = 1024 * MB;
+
+// Membership is [min, max); bounds are sent as minSize/maxSize to /Items.
+export const SIZE_BUCKETS = [
+    { value: 'lt250mb', label: 'Under 250 MB', min: undefined, max: 250 * MB },
+    { value: 'mb250to500', label: '250 MB – 500 MB', min: 250 * MB, max: 500 * MB },
+    { value: 'mb500to1gb', label: '500 MB – 1 GB', min: 500 * MB, max: GB },
+    { value: 'gb1to2', label: '1 GB – 2 GB', min: GB, max: 2 * GB },
+    { value: 'gt2gb', label: 'Over 2 GB', min: 2 * GB, max: undefined }
+];
+
 export const supportsCustomFilters = (viewType: LibraryTab) => SUPPORTED_TABS.includes(viewType);
+
+export const getSizeQuery = (viewType: LibraryTab, libraryViewSettings: LibraryViewSettings) => {
+    const bucket = SIZE_BUCKETS.find(b => b.value === libraryViewSettings.Filters?.Size);
+    if (!bucket || !supportsCustomFilters(viewType)) return {};
+    return { minSize: bucket.min, maxSize: bucket.max };
+};
 
 interface DislikeListResponse { Items?: { ItemId?: string }[] }
 interface RatedItemsResponse { ItemIds?: string[] }

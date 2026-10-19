@@ -16,6 +16,9 @@ import { LibraryViewSettings } from 'types/library';
 import { LibraryTab } from 'types/libraryTab';
 import isEqual from 'lodash-es/isEqual';
 
+// Not in the generated SDK enum; the server accepts it (Jellyfin.Data ItemSortBy.Size).
+const SORT_BY_SIZE = 'Size' as ItemSortBy;
+
 type SortOption = {
     label: string;
     value: ItemSortBy[];
@@ -42,7 +45,8 @@ const movieOrFavoriteOptions = [
     { label: 'OptionParentalRating', value: [ItemSortBy.OfficialRating, ItemSortBy.SortName] },
     { label: 'OptionPlayCount', value: [ItemSortBy.PlayCount, ItemSortBy.SortName] },
     { label: 'OptionReleaseDate', value: [ItemSortBy.ProductionYear, ItemSortBy.PremiereDate, ItemSortBy.SortName] },
-    { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] }
+    { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] },
+    { label: 'FileSize', value: [SORT_BY_SIZE, ItemSortBy.SortName] }
 ];
 
 const photosOrPhotoAlbumsOptions = [
@@ -60,7 +64,8 @@ const videoOrMusicVideoOptions = [
     { label: 'OptionParentalRating', value: [ItemSortBy.OfficialRating, ItemSortBy.SortName] },
     { label: 'OptionPlayCount', value: [ItemSortBy.PlayCount, ItemSortBy.SortName] },
     { label: 'OptionReleaseDate', value: [ItemSortBy.ProductionYear, ItemSortBy.PremiereDate, ItemSortBy.SortName] },
-    { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] }
+    { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] },
+    { label: 'FileSize', value: [SORT_BY_SIZE, ItemSortBy.SortName] }
 ];
 
 const sortOptionsMapping: SortOptionsMapping = {
@@ -86,7 +91,8 @@ const sortOptionsMapping: SortOptionsMapping = {
         { label: 'OptionDatePlayed', value: [ItemSortBy.DatePlayed, ItemSortBy.SortName] },
         { label: 'OptionParentalRating', value: [ItemSortBy.OfficialRating, ItemSortBy.SortName] },
         { label: 'OptionPlayCount', value: [ItemSortBy.PlayCount, ItemSortBy.SortName] },
-        { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] }
+        { label: 'Runtime', value: [ItemSortBy.Runtime, ItemSortBy.SortName] },
+        { label: 'FileSize', value: [SORT_BY_SIZE, ItemSortBy.SortName] }
     ],
     [LibraryTab.Albums]: [
         { label: 'Name', value: [ItemSortBy.SortName] },

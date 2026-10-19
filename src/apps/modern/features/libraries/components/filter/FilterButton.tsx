@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 
 import { useGetQueryFilters, useGetQueryFiltersLegacy, useGetStudios } from 'hooks/useFetchItems';
 import globalize from 'lib/globalize';
+import { supportsCustomFilters } from 'utils/customFilters';
 
 import FiltersAudioLanguages from './FiltersAudioLanguages';
 import FiltersFeatures from './FiltersFeatures';
@@ -23,6 +24,7 @@ import FiltersGenres from './FiltersGenres';
 import FiltersOfficialRatings from './FiltersOfficialRatings';
 import FiltersEpisodesStatus from './FiltersEpisodesStatus';
 import FiltersSeriesStatus from './FiltersSeriesStatus';
+import FiltersSize from './FiltersSize';
 import FiltersStatus from './FiltersStatus';
 import FiltersStudios from './FiltersStudios';
 import FiltersSubtitleLanguages from './FiltersSubtitleLanguages';
@@ -316,6 +318,28 @@ const FilterButton: FC<FilterButtonProps> = ({
                                 setLibraryViewSettings={
                                     setLibraryViewSettings
                                 }
+                            />
+                        </AccordionDetails>
+                    </Accordion>
+                )}
+
+                {supportsCustomFilters(viewType) && (
+                    <Accordion
+                        expanded={expanded === 'filtersSize'}
+                        onChange={handleChange('filtersSize')}
+                    >
+                        <AccordionSummary
+                            aria-controls='filtersSize-content'
+                            id='filtersSize-header'
+                        >
+                            <Typography>
+                                {globalize.translate('FileSize')}
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <FiltersSize
+                                libraryViewSettings={libraryViewSettings}
+                                setLibraryViewSettings={setLibraryViewSettings}
                             />
                         </AccordionDetails>
                     </Accordion>

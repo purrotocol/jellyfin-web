@@ -367,6 +367,7 @@
     "FFmpegSavePathNotFound": "We're unable to find FFmpeg using the path you've entered. FFprobe is also required and must exist in the same folder. These components are normally bundled together in the same download. Please check the path and try again.",
     "File": "File",
     "FileNotFound": "File not found.",
+    "FileSize": "File size",
     "FileReadCancelled": "The file read has been canceled.",
     "FileReadError": "An error occurred while reading the file.",
     "Filter": "Filter",

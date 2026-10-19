@@ -40,6 +40,8 @@ export enum CustomFilter {
 
 export interface Filters {
     Custom?: CustomFilter[];
+    // Id of a SIZE_BUCKETS entry (utils/customFilters.ts); absent means any size.
+    Size?: string;
     Features?: FeatureFilters[];
     Genres?: string[];
     OfficialRatings?: string[];

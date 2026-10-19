@@ -21,7 +21,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import datetime from 'scripts/datetime';
 
 import { type JellyfinApiContext, useApi } from './useApi';
-import { getCustomFilterQuery } from 'utils/customFilters';
+import { getCustomFilterQuery, getSizeQuery } from 'utils/customFilters';
 import { getAlphaPickerQuery, getFieldsQuery, getFiltersQuery, getLimitQuery } from 'utils/items';
 import { getProgramSections, getSuggestionSections } from 'utils/sections';
 
@@ -354,7 +354,9 @@ const fetchGetItemsViewByType = async (
                         startIndex: libraryViewSettings.StartIndex
                     },
                     {
-                        signal: options?.signal
+                        signal: options?.signal,
+                        // minSize/maxSize aren't in the generated SDK request type.
+                        params: getSizeQuery(viewType, libraryViewSettings)
                     }
                 );
                 break;
