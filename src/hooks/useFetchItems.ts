@@ -21,6 +21,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import datetime from 'scripts/datetime';
 
 import { type JellyfinApiContext, useApi } from './useApi';
+import { getCustomFilterQuery } from 'utils/customFilters';
 import { getAlphaPickerQuery, getFieldsQuery, getFiltersQuery, getLimitQuery } from 'utils/items';
 import { getProgramSections, getSuggestionSections } from 'utils/sections';
 
@@ -197,6 +198,11 @@ const fetchGetItemsViewByType = async (
     const { api, user } = currentApi;
     if (api && user?.Id && viewType) {
         const isFavorite = libraryViewSettings.Filters?.Status?.includes(ItemFilter.IsFavorite) || undefined;
+        const customFilter = await getCustomFilterQuery(api, viewType, parentId, libraryViewSettings, options?.signal);
+        if (customFilter.kind === 'empty') {
+            return { Items: [], TotalRecordCount: 0, StartIndex: 0 } as ItemDtoQueryResult;
+        }
+
         let response;
         switch (viewType) {
             case LibraryTab.AlbumArtists: {
@@ -340,6 +346,8 @@ const fetchGetItemsViewByType = async (
                         ...getLimitQuery(),
                         ...getAlphaPickerQuery(libraryViewSettings),
                         isFavorite: viewType === LibraryTab.Favorites ? true : undefined,
+                        ids: customFilter.kind === 'ids' ? customFilter.ids : undefined,
+                        excludeItemIds: customFilter.kind === 'excludeIds' ? customFilter.ids : undefined,
                         sortBy: libraryViewSettings.SortBy,
                         sortOrder: [libraryViewSettings.SortOrder],
                         includeItemTypes: itemType,

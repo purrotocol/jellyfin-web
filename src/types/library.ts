@@ -32,7 +32,14 @@ export enum VideoBasicFilter {
     Is3D = 'Is3D'
 }
 
+// Backed by the server-side dislike index (see utils/customFilters.ts); mutually exclusive.
+export enum CustomFilter {
+    Disliked = 'Disliked',
+    Unrated = 'Unrated'
+}
+
 export interface Filters {
+    Custom?: CustomFilter[];
     Features?: FeatureFilters[];
     Genres?: string[];
     OfficialRatings?: string[];

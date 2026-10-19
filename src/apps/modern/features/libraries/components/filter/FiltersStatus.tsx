@@ -5,7 +5,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 import globalize from 'lib/globalize';
-import { LibraryViewSettings } from 'types/library';
+import { supportsCustomFilters } from 'utils/customFilters';
+import { CustomFilter, LibraryViewSettings } from 'types/library';
 import { LibraryTab } from 'types/libraryTab';
 
 const defaultFiltersOptions = [
@@ -62,6 +63,25 @@ const FiltersStatus: FC<FiltersStatusProps> = ({
         [setLibraryViewSettings, libraryViewSettings?.Filters?.Status]
     );
 
+    const onCustomFilterChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            event.preventDefault();
+            const value = event.target.value as CustomFilter;
+            const active = libraryViewSettings?.Filters?.Custom?.includes(value);
+
+            // Disliked and Unrated are mutually exclusive, so at most one is ever stored.
+            setLibraryViewSettings((prevState) => ({
+                ...prevState,
+                StartIndex: 0,
+                Filters: {
+                    ...prevState.Filters,
+                    Custom: active ? undefined : [value]
+                }
+            }));
+        },
+        [setLibraryViewSettings, libraryViewSettings?.Filters?.Custom]
+    );
+
     const getVisibleFiltersStatus = () => {
         const visibleFiltersStatus: ItemFilter[] = [ItemFilter.IsFavorite];
 
@@ -103,6 +123,19 @@ const FiltersStatus: FC<FiltersStatusProps> = ({
                         label={globalize.translate(filter.label)}
                     />
                 ))}
+            {supportsCustomFilters(viewType) && Object.values(CustomFilter).map((filter) => (
+                <FormControlLabel
+                    key={filter}
+                    control={
+                        <Checkbox
+                            checked={!!libraryViewSettings?.Filters?.Custom?.includes(filter)}
+                            onChange={onCustomFilterChange}
+                            value={filter}
+                        />
+                    }
+                    label={globalize.translate(filter)}
+                />
+            ))}
         </FormGroup>
     );
 };
