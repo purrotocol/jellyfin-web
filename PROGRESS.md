@@ -16,3 +16,10 @@
 - Disliked → `ids=`, Unrated → `excludeItemIds=` from `Plugins/TrickplayStatus/Dislikes[/Rated]`; capped at 200 ids (Kestrel 8KB request line), over the cap the filter is not applied (console warning).
 - File size uses server `minSize`/`maxSize` and `sortBy=Size` (see jellyfin-fork PROGRESS.md). Tabs: Movies, Episodes, Videos, MusicVideos.
 - Dislike card badge/detail/OSD buttons still come from `dislike.js` (legacy DOM still present). Verified manually on test CT190 (proxmox, 10.0.0.55).
+
+## Ctrl+D: delete the playing video and skip to the next
+
+- `src/custom/delete-skip.js` (ported from the jellyfin-custom plugin's `Web/delete-skip.js`, imported in `src/custom/index.js`). Ctrl+D during video playback; second press within 4s confirms (the delete is permanent).
+- Order: click the OSD next-track button (or `history.back()` at end of queue), then `ApiClient.deleteItem` after 2s, retry once after 3s (404 on retry = already gone). Deleting while the stream is open fails on the SMB mount (`Directory not empty`) and breaks the Stopped report (FK error).
+- Item id from `.videoOsdBottom .btnUserRating[data-id]`, same as Shift+X. Name/`CanDelete` lookup is best-effort.
+- Deployed to CT190 (prod) by replacing `/opt/jellyfin-web` (previous build kept as `/opt/jellyfin-web.prev`). Production build on Node 18 needs an `Array.prototype.toSorted` polyfill via `NODE_OPTIONS=--require` (copy-webpack-plugin).
